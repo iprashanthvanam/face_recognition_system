@@ -12,5 +12,4 @@ face-recognition-models==0.3.0
 numpy==1.26.4
 Pillow==10.0.1
 
-# # Optional for deployment
-# gunicorn==21.2.0
+gunicorn==21.2.0
