@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Integrated Face Recognition</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>INTEGRATED FACE RECOGNITION SYSTEM</h1>
+      <nav>
+        <a href="{{ url_for('upload_page') }}">Upload & Recognize</a>
+        <a href="{{ url_for('webcam_page') }}">Webcam</a>
+        <a href="{{ url_for('manage_page') }}">Manage Faces</a>
+      </nav>
+      <p class="card">Application that recognizes faces from uploaded images or webcam snapshots. Add known faces in Manage.</p>
+    </header>
+  </div>
+</body>
+</html>

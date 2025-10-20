@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Result</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h2>Recognition Result</h2>
+    {% if source == "upload" and filename %}
+      <div>
+        <img src="{{ url_for('uploaded_file', filename=filename) }}" style="max-width:400px;border:1px solid #ddd;padding:4px;">
+      </div>
+    {% endif %}
+    <div class="card" style="margin-top:10px;">
+      {% if result.status == 'ok' %}
+        <ul>
+        {% for r in result.results %}
+          <li>Face #{{ r.face_index }} — <strong>{{ r.name }}</strong>
+            {% if r.distance %}
+              (distance: {{ '%.3f'|format(r.distance) }})
+            {% endif %}
+          </li>
+        {% endfor %}
+        </ul>
+      {% else %}
+        <p>{{ result.message }}</p>
+      {% endif %}
+    </div>
+    <p><a href="{{ url_for('upload_page') }}">Try another</a> • <a href="{{ url_for('index') }}">Home</a></p>
+  </div>
+</body>
+</html>

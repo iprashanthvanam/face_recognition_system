@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Manage Faces</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h2>Manage Known Faces</h2>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for m in messages %}
+          <div class="flash">{{ m }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <div class="card">
+      <h3>Add a New Person</h3>
+      <form method="post" action="{{ url_for('add_face') }}" enctype="multipart/form-data">
+        <label>Name</label>
+        <input type="text" name="name" required placeholder="Full name or identifier">
+        <label>Image (one face in image)</label>
+        <input type="file" name="image" accept="image/*" required>
+        <button type="submit">Add & Retrain</button>
+      </form>
+    </div>
+
+    <div style="margin-top:12px;" class="card">
+      <h3>Existing People</h3>
+      {% if persons %}
+        {% for p in persons %}
+          <div class="person">
+            {{ p }}
+            <form method="post" action="{{ url_for('delete_face_route') }}" style="display:inline;">
+              <input type="hidden" name="name" value="{{ p }}">
+              <button type="submit">Delete</button>
+            </form>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p>No faces yet. Add someone above.</p>
+      {% endif %}
+    </div>
+
+    <form method="post" action="{{ url_for('retrain') }}" style="margin-top:12px;">
+      <button type="submit">Retrain Encodings from faces/ Directory</button>
+    </form>
+
+    <p style="margin-top:12px;"><a href="{{ url_for('index') }}">Home</a></p>
+  </div>
+</body>
+</html>
