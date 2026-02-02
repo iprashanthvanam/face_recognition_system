@@ -1,165 +1,153 @@
-# Village Development Project
+# Integrated Face Recognition System
 
 **Full Project Documentation & README**  
-**Last updated:** May 2025  
+**Last updated:** July 2025  
 **Author:** Prashanth  
-**Location:** Hyderabad, Telangana, India  
+**Project Type:** Computer Vision / Face Recognition Web Application  
+**Location:** India  
 
 ---
 
 ## Project Overview
 
-Village Development is a Django-based web application created to assist rural planning and development. It allows users to:
+The **Integrated Face Recognition System** is a Flask-based web application that performs real-time and image-based face recognition using computer vision and deep learning techniques.
 
-- Enter detailed village information through a web form
-- Automatically generate analytics (growth rate, density, infrastructure score, etc.)
-- Produce rule-based AI recommendations for improvement
-- Create visual 2D maps highlighting existing + recommended infrastructure
-- Generate professionally formatted multi-page PDF reports
+The application allows users to:
+- Upload images to identify known faces
+- Perform live face recognition using a webcam
+- Add new people to the system dynamically
+- Retrain face encodings without restarting the server
+- Manage and delete existing known faces
 
-The project demonstrates a full-stack rural development planning tool using:
-
-- **Django** (web framework)
-- **PostgreSQL + PostGIS** (spatial database)
-- **GeoPandas + Matplotlib** (static map generation)
-- **ReportLab** (PDF generation)
-- **Rule-based recommendation engine**
+This project demonstrates a **complete end-to-end face recognition pipeline**, combining backend processing, model persistence, and a clean web-based user interface.
 
 ---
 
-## Features
+## Key Features
 
-- **Data Entry:** Web form for entering comprehensive village data (demographic, infrastructure, geographic, administrative).
-- **Analytics:** Real-time calculation of key development metrics.
-- **AI Recommendations:** Rule-based suggestions across 9+ categories (infrastructure, education, health, sustainability, etc.).
-- **Mapping:** Static map generation with emoji annotations for existing & suggested facilities.
-- **Reporting:** Multi-page landscape PDF report with header, overview, infrastructure assessment, analysis, recommendations, and declaration.
-- **Reliability:** Robust error handling, logging, and thread-safe Matplotlib usage.
+- **Image Upload Recognition:** Detect and recognize faces from uploaded images
+- **Webcam Recognition:** Real-time face recognition via webcam snapshots
+- **Face Management:** Add, delete, and retrain known faces dynamically
+- **Encodings Persistence:** Face encodings stored using pickle for fast reuse
+- **Multi-Face Detection:** Supports multiple faces in a single image/frame
+- **Distance Scoring:** Displays face distance confidence
+- **Clean UI:** Responsive HTML + CSS interface
+- **Production Ready:** Gunicorn + Render deployment support
 
 ---
 
 ## Tech Stack
 
 | Layer | Technology | Purpose |
-|------|------------|---------|
-| **Backend** | Django 5.2 | Web framework, ORM, views, routing |
-| **Database** | PostgreSQL 15 + PostGIS | Relational + spatial data storage |
-| **Mapping** | GeoPandas, Matplotlib ('Agg') | Static 2D map generation |
-| **PDF Gen** | ReportLab | Professional multi-page PDF reports |
-| **Analytics** | Pure Python + Matplotlib | Metric calculation & bar charts |
-| **Logic** | Rule-based logic | Actionable suggestions |
-| **Logging** | Python logging module | Debug & production monitoring |
+|-----|-----------|--------|
+| **Backend** | Flask | Web framework |
+| **Face Recognition** | face_recognition (dlib) | Face detection & encoding |
+| **Computer Vision** | OpenCV | Image & webcam processing |
+| **Image Handling** | Pillow (PIL) | Image decoding |
+| **Frontend** | HTML, CSS, Jinja2 | User interface |
+| **Model Storage** | Pickle (.pkl) | Face encodings persistence |
+| **Server** | Gunicorn | Production WSGI server |
+| **Deployment** | Render | Cloud deployment |
 
 ---
 
+## Application Pages
+
+### Home
+- Navigation to upload, webcam, and management pages
+
+### Upload & Recognize
+- Upload an image
+- Detect and recognize all faces
+- Display names and distance scores
+
+### Webcam Recognition
+- Capture webcam snapshots every second
+- Send frames to backend for recognition
+- Display live recognition results
+
+### Manage Faces
+- Add new people with images
+- Delete existing people
+- Retrain encodings instantly
 
 ---
 
-## Installation & Setup (Step-by-step)
+## Face Recognition Workflow
 
-### 1. Prerequisites
-
-- Python ≥ 3.11 (recommended: 3.13)
-- PostgreSQL 15+ with PostGIS extension
-- Git (optional)
-- Virtual environment tool (venv / virtualenv / conda)
+1. User uploads image / webcam frame
+2. Face locations detected using `face_recognition`
+3. Face encodings extracted
+4. Encodings compared against stored encodings
+5. Best match selected using distance threshold
+6. Results returned to UI
 
 ---
 
-### 2. Clone & Enter Project
+## Installation & Setup (Local)
+
+### 1️⃣ Prerequisites
+
+- Python ≥ 3.11
+- pip
+- Webcam (for live recognition)
+
+---
 
 ```bash
+### 2️⃣ Clone Repository
+
 git clone <your-repo-url>
-cd rural-dev-web/backend
+cd face-recognition-system
 
-For windows:
+
+### 3️⃣ Create Virtual Environment:
 python -m venv venv
-venv\Scripts\activate
+source venv/bin/activate   # Linux / Mac
+venv\Scripts\activate      # Windows
 
-For Linux/Mac
-python3 -m venv venv
-source venv/bin/activate
-
----
-
-### 3. Install Dependencies
-
-pip install --upgrade pip
-pip install django==5.2 psycopg2-binary geopandas matplotlib reportlab django-geo shapely
-Simply : pip install -r requirements.txt
-
----
-
-### 4. Windows (GeoPandas issues – Conda recommended)
-
-conda create -n rural-dev python=3.11
-conda activate rural-dev
-conda install -c conda-forge geopandas
-pip install django psycopg2-binary matplotlib reportlab django-geo shapely
-
----
-
-### 5. Database Setup
-
-createdb -U postgres village_web_db
-psql -U postgres -d village_web_db -c "CREATE EXTENSION postgis;"
-
-Update rural_dev/settings.py:
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'village_web_db',
-        'USER': 'postgres',
-        'PASSWORD': 'your_password_here',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
+### 4️⃣ Install Dependencies:
+pip install -r requirements.txt
 
 
----
+### ⚠️ dlib-bin is used to avoid compilation issues.
 
-### 6. Apply Migrations
+### 5️⃣ Train Initial Face Encodings (Optional):
+python train_faces.py
 
-python manage.py makemigrations
-python manage.py migrate
-
-
----
-
-### 7. GeoJSON File Configuration
-
-Place your village GeoJSON file at:
-C:\Users\<your-username>\Downloads\filtered_output.geojson
-
-OR update the path inside:
-village_app/utils/gis.py
-
----
-
-### 8. Run Development Server
-
-python manage.py runserver --insecure
-Open browser:
-👉 http://127.0.0.1:8000/
+### 6️⃣ Run Development Server:
+python app.py
 
 
+### App runs at:
+http://127.0.0.1:5000
 
+### Adding New Faces:
 
+Go to Manage Faces
+Enter person name
+Upload an image with one clear face
+System automatically retrains encodings
 
+✔ No restart required
+✔ Encodings updated instantly
 
+### Deleting Faces:
 
+Delete individual people from Manage Faces
+Encodings retrained automatically
+Supported Inputs
+JPG / JPEG
+PNG
 
+### Webcam snapshots:
+Multiple faces per image
 
-
-
-
-
-
-
-
-
-
-
-
+### Deployment (Render):
+The app is configured for Render using Gunicorn.
+services:
+  - type: web
+    name: face-recognition
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
