@@ -151,3 +151,7 @@ services:
     env: python
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app
+
+
+![Home Page](templates/Screenshot 2026-02-02 225013.png)
+
