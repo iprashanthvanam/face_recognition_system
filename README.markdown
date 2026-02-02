@@ -153,5 +153,3 @@ services:
     startCommand: gunicorn app:app
 
 
-![Home Page](templates/Screenshot 2026-02-02 225013.png)
-
