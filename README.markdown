@@ -1,155 +1,176 @@
-# Integrated Face Recognition System
+### Integrated Face Recognition System
 
-**Full Project Documentation & README**  
-**Last updated:** July 2025  
-**Author:** Prashanth  
-**Project Type:** Computer Vision / Face Recognition Web Application  
-**Location:** India  
+### 🔗 Live Application:
+https://iprashanthvanam.pythonanywhere.com/  
 
----
+
 
 ## Project Overview
 
-The **Integrated Face Recognition System** is a Flask-based web application that performs real-time and image-based face recognition using computer vision and deep learning techniques.
+The **Integrated Face Recognition System** is a complete web-based face recognition application built using **Flask** and the **face_recognition** library (powered by dlib).
 
-The application allows users to:
-- Upload images to identify known faces
-- Perform live face recognition using a webcam
-- Add new people to the system dynamically
-- Retrain face encodings without restarting the server
-- Manage and delete existing known faces
+It allows users to:
+- Upload images and recognize known faces
+- Perform real-time face recognition using webcam
+- Add new people to the recognition database
+- Delete existing people
+- Instantly retrain face encodings without restarting the server
 
-This project demonstrates a **complete end-to-end face recognition pipeline**, combining backend processing, model persistence, and a clean web-based user interface.
+The project demonstrates a full end-to-end face recognition pipeline — from face detection and encoding, to persistent storage, real-time recognition, and a clean user interface.
 
 ---
 
 ## Key Features
 
-- **Image Upload Recognition:** Detect and recognize faces from uploaded images
-- **Webcam Recognition:** Real-time face recognition via webcam snapshots
-- **Face Management:** Add, delete, and retrain known faces dynamically
-- **Encodings Persistence:** Face encodings stored using pickle for fast reuse
-- **Multi-Face Detection:** Supports multiple faces in a single image/frame
-- **Distance Scoring:** Displays face distance confidence
-- **Clean UI:** Responsive HTML + CSS interface
-- **Production Ready:** Gunicorn + Render deployment support
+- Image upload + multi-face recognition
+- Webcam live recognition (frame-by-frame)
+- Add new persons with face images
+- Delete persons from database
+- Instant retraining of face encodings
+- Face distance confidence score
+- Responsive modern UI
+- Persistent face encodings (pickle file)
+- Support for multiple faces per image/frame
+- Error handling & user feedback
 
 ---
 
 ## Tech Stack
 
-| Layer | Technology | Purpose |
-|-----|-----------|--------|
-| **Backend** | Flask | Web framework |
-| **Face Recognition** | face_recognition (dlib) | Face detection & encoding |
-| **Computer Vision** | OpenCV | Image & webcam processing |
-| **Image Handling** | Pillow (PIL) | Image decoding |
-| **Frontend** | HTML, CSS, Jinja2 | User interface |
-| **Model Storage** | Pickle (.pkl) | Face encodings persistence |
-| **Server** | Gunicorn | Production WSGI server |
-| **Deployment** | Render | Cloud deployment |
+| Layer              | Technology              | Purpose                              |
+|--------------------|-------------------------|--------------------------------------|
+| Backend            | Flask                   | Web framework                        |
+| Face Recognition   | face_recognition (dlib) | Face detection & 128D encoding       |
+| Computer Vision    | OpenCV (cv2)            | Image & video frame processing       |
+| Image Handling     | Pillow (PIL)            | Image loading & conversion           |
+| Frontend           | HTML5, CSS3, Jinja2     | User interface & templating          |
+| Data Persistence   | Pickle                  | Store & load face encodings          |
+| Deployment         | PythonAnywhere          | Free Flask hosting                   |
+| Development Server | Flask built-in          | Local development                    |
 
 ---
 
-## Application Pages
 
-### Home
-- Navigation to upload, webcam, and management pages
-
-### Upload & Recognize
-- Upload an image
-- Detect and recognize all faces
-- Display names and distance scores
-
-### Webcam Recognition
-- Capture webcam snapshots every second
-- Send frames to backend for recognition
-- Display live recognition results
-
-### Manage Faces
-- Add new people with images
-- Delete existing people
-- Retrain encodings instantly
-
----
-
-## Face Recognition Workflow
-
-1. User uploads image / webcam frame
-2. Face locations detected using `face_recognition`
-3. Face encodings extracted
-4. Encodings compared against stored encodings
-5. Best match selected using distance threshold
-6. Results returned to UI
-
----
 
 ## Installation & Setup (Local)
 
-### 1️⃣ Prerequisites
-
-- Python ≥ 3.11
+### Prerequisites
+- Python 3.8–3.11 (3.11 recommended)
 - pip
 - Webcam (for live recognition)
 
----
-
-```bash
-### 2️⃣ Clone Repository
-
-git clone <your-repo-url>
-cd face-recognition-system
 
 
-### 3️⃣ Create Virtual Environment:
+### Clone the Repository
+Cloning repository...
+```
+git clone https://github.com/iprashanthvanam/face-recognition-system.git
+cd face-recognition-system || exit
+```
+
+### Create & Activate Virtual Environment
+Creating virtual environment...
+```
 python -m venv venv
-source venv/bin/activate   # Linux / Mac
-venv\Scripts\activate      # Windows
+```
 
-### 4️⃣ Install Dependencies:
+Activating virtual environment...
+- Windows:
+```
+venv\Scripts\activate
+```
+- Linux / macOS:
+```
+source venv/bin/activate
+```
+
+### Install Dependencies
+Installing dependencies...
+```
+pip install --upgrade pip
 pip install -r requirements.txt
+```
 
+### If installation fails:
+- Install cmake + Visual C++ Build Tools (Windows)
+- Or use precompiled dlib wheels
 
-### ⚠️ dlib-bin is used to avoid compilation issues.
-
-### 5️⃣ Train Initial Face Encodings (Optional):
+### Initial Training (Optional)
+echo "Running initial face training (optional)..."
+```
 python train_faces.py
+```
 
-### 6️⃣ Run Development Server:
+### Run the Application
+Starting Flask application...
+```
 python app.py
+```
 
-
-### App runs at:
+Application running at:
+```
 http://127.0.0.1:5000
+```
 
-### Adding New Faces:
+### How to Use
 
-Go to Manage Faces
-Enter person name
-Upload an image with one clear face
-System automatically retrains encodings
+Add Known Faces
+- Go to **Manage Faces**
+- Enter person's name
+- Upload a clear face image (JPG/PNG)
+- Click **Add & Retrain**
 
-✔ No restart required
-✔ Encodings updated instantly
+### Recognize Faces
+- **Upload Image**  
+  → Go to **Upload & Recognize** → select image → see results
 
-### Deleting Faces:
+- **Live Webcam**  
+  → Go to **Webcam** → allow camera access → real-time recognition starts
 
-Delete individual people from Manage Faces
-Encodings retrained automatically
-Supported Inputs
-JPG / JPEG
-PNG
+### Delete a Person
+- Go to **Manage Faces**
+- Click **Delete** next to the person
 
-### Webcam snapshots:
-Multiple faces per image
+### Retrain Encodings
+- After adding or deleting faces
+- Click **Retrain Encodings** button
 
-### Deployment (Render):
-The app is configured for Render using Gunicorn.
-services:
-  - type: web
-    name: face-recognition
-    env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app
+### Project Pages
+
+- **Home**  
+  Introduction and navigation to all features
+
+- **Upload & Recognize**  
+  Upload an image → detect & recognize multiple faces
+
+- **Webcam**  
+  Real-time face recognition using your camera
+
+- **Manage Faces**  
+  Add new people, delete existing ones, retrain encodings
 
 
+### Deployment Steps:
+- Create account on https://www.pythonanywhere.com
+- Upload files via Git or Files tab
+- Create new Web App → Flask → Python version
+- Set source code path:
+```
+cd /home/yourusername/face-recognition-system
+```
+
+### WSGI Configuration:
+```
+import sys
+path = '/home/yourusername/face-recognition-system'
+if path not in sys.path:
+  sys.path.append(path)
+from app import app as application
+```
+
+### Install dependencies:
+```
+pip install --user -r requirements.txt
+```
+
+Reload the web app from dashboard
