@@ -159,4 +159,57 @@ from app import app as application
 pip install --user -r requirements.txt
 ```
 
-Reload the web app from dashboard
+- Reload the web app from dashboard
+
+
+<h2 align="center">🏠 Landing Page</h2>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/iprashanthvanam/face_recognition_system/main/templates/Screenshot%202026-02-02%20225013.png" width="45%" />
+  
+</p>
+
+
+
+<h2 align="center">📤 Upload & Recognize</h2>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/iprashanthvanam/face_recognition_system/main/templates/Screenshot%202026-02-02%20225023.png" width="45%" />
+  <!-- <img src="https://raw.githubusercontent.com/iprashanthvanam/face_recognition_system/main/templates/Screenshot%202026-02-02%20225047.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/iprashanthvanam/face_recognition_system/main/templates/Screenshot%202026-02-02%20225101.png" width="45%" /> -->
+</p>
+
+
+
+
+
+<h2 align="center">📸 Webcam — Snapshot Recognition</h2>
+
+<p align="center">
+    <img src="https://raw.githubusercontent.com/iprashanthvanam/face_recognition_system/main/templates/Screenshot%202026-02-02%20225047.png" width="45%" />
+  <!-- <img src="https://raw.githubusercontent.com/iprashanthvanam/face_recognition_system/main/templates/Screenshot%202026-02-02%20225115.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/iprashanthvanam/face_recognition_system/main/templates/Screenshot%202026-02-02%20225532.png" width="45%" /> -->
+</p>
+
+
+
+
+
+<h2 align="center">🧑‍💼 Manage Known Faces</h2>
+
+<p align="center">
+    <img src="https://raw.githubusercontent.com/iprashanthvanam/face_recognition_system/main/templates/Screenshot%202026-02-02%20225115.png" width="45%" />
+  <!-- <img src="https://raw.githubusercontent.com/iprashanthvanam/face_recognition_system/main/templates/Screenshot%202026-02-02%20225645.png" width="60%" /> -->
+</p>
+
+
+
+<h2 align="center">📶 Results </h2>
+
+<p align="center">
+    <img src="https://raw.githubusercontent.com/iprashanthvanam/face_recognition_system/main/templates/Screenshot%202026-02-02%20225532.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/iprashanthvanam/face_recognition_system/main/templates/Screenshot%202026-02-02%20225645.png" width="45%" />
+</p>
+
+
+
