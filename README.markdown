@@ -1,11 +1,11 @@
 ### Integrated Face Recognition System
 
-### 🔗 Live Application:
+Live Application:
 https://iprashanthvanam.pythonanywhere.com/  
 
 
 
-## Project Overview
+### Project Overview
 
 The **Integrated Face Recognition System** is a complete web-based face recognition application built using **Flask** and the **face_recognition** library (powered by dlib).
 
@@ -20,7 +20,7 @@ The project demonstrates a full end-to-end face recognition pipeline — from fa
 
 ---
 
-## Key Features
+### Key Features
 
 - Image upload + multi-face recognition
 - Webcam live recognition (frame-by-frame)
@@ -35,7 +35,7 @@ The project demonstrates a full end-to-end face recognition pipeline — from fa
 
 ---
 
-## Tech Stack
+### Tech Stack
 
 | Layer              | Technology              | Purpose                              |
 |--------------------|-------------------------|--------------------------------------|
@@ -52,23 +52,23 @@ The project demonstrates a full end-to-end face recognition pipeline — from fa
 
 
 
-## Installation & Setup (Local)
+### Installation & Setup (Local)
 
-### Prerequisites
+#### Prerequisites
 - Python 3.8–3.11 (3.11 recommended)
 - pip
 - Webcam (for live recognition)
 
 
 
-### Clone the Repository
+#### Clone the Repository
 Cloning repository...
 ```
 git clone https://github.com/iprashanthvanam/face-recognition-system.git
 cd face-recognition-system || exit
 ```
 
-### Create & Activate Virtual Environment
+#### Create & Activate Virtual Environment
 Creating virtual environment...
 ```
 python -m venv venv
@@ -84,24 +84,24 @@ venv\Scripts\activate
 source venv/bin/activate
 ```
 
-### Install Dependencies
+#### Install Dependencies
 Installing dependencies...
 ```
 pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### If installation fails:
+#### If installation fails:
 - Install cmake + Visual C++ Build Tools (Windows)
 - Or use precompiled dlib wheels
 
-### Initial Training (Optional)
+#### Initial Training (Optional)
 echo "Running initial face training (optional)..."
 ```
 python train_faces.py
 ```
 
-### Run the Application
+#### Run the Application
 Starting Flask application...
 ```
 python app.py
@@ -111,7 +111,7 @@ Application running at:
 ```
 http://127.0.0.1:5000
 ```
-
+---
 ### How to Use
 
 Add Known Faces
@@ -120,35 +120,21 @@ Add Known Faces
 - Upload a clear face image (JPG/PNG)
 - Click **Add & Retrain**
 
-### Recognize Faces
+#### Recognize Faces
 - **Upload Image**  
   → Go to **Upload & Recognize** → select image → see results
 
 - **Live Webcam**  
   → Go to **Webcam** → allow camera access → real-time recognition starts
 
-### Delete a Person
+#### Delete a Person
 - Go to **Manage Faces**
 - Click **Delete** next to the person
 
-### Retrain Encodings
+#### Retrain Encodings
 - After adding or deleting faces
 - Click **Retrain Encodings** button
-
-### Project Pages
-
-- **Home**  
-  Introduction and navigation to all features
-
-- **Upload & Recognize**  
-  Upload an image → detect & recognize multiple faces
-
-- **Webcam**  
-  Real-time face recognition using your camera
-
-- **Manage Faces**  
-  Add new people, delete existing ones, retrain encodings
-
+---
 
 ### Deployment Steps:
 - Create account on https://www.pythonanywhere.com
@@ -159,7 +145,7 @@ Add Known Faces
 cd /home/yourusername/face-recognition-system
 ```
 
-### WSGI Configuration:
+#### WSGI Configuration:
 ```
 import sys
 path = '/home/yourusername/face-recognition-system'
@@ -168,7 +154,7 @@ if path not in sys.path:
 from app import app as application
 ```
 
-### Install dependencies:
+#### Install dependencies:
 ```
 pip install --user -r requirements.txt
 ```
