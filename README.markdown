@@ -144,8 +144,6 @@ A complete visual walkthrough of every screen in the system.
   <sub><b>Add a new person.</b> Enter a name and upload a clear face image. The system detects the face, saves it to the person's folder under <code>static/faces/</code>, and automatically retrains the pickle encodings file — no server restart needed.</sub>
 </div>
 
----
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ---
