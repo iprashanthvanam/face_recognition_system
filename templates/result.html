@@ -1,436 +1,406 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Recognition Result - Face Recognition</title>
-  <meta name="description" content="Face recognition analysis results">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-style.css') }}">
+  <title>Recognition Result — Face Recognition System</title>
+  <meta name="description" content="AI face recognition analysis results with detected faces and confidence scores">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
   <style>
-    /* Modern Face Recognition System CSS */
-/* Design System: Contemporary AI interface with glass morphism and smooth interactions */
-:root {
-      --color-primary: #0d9488;
-      --color-primary-dark: #0f766e;
-      --color-primary-light: #14b8a6;
-      --color-secondary: #06b6d4;
-      --color-accent: #22d3ee;
-
-      --color-bg-dark: #0a192f;
-      --color-bg-darker: #020617;
-      --color-bg-card: rgba(255, 255, 255, 0.98);
-      --color-bg-glass: rgba(255, 255, 255, 0.05);
-
-      --color-text-primary: #1e293b;
-      --color-text-secondary: #64748b;
-      --color-text-light: #ffffff;
-      --color-text-muted: #94a3b8;
-
-      --color-success: #14b8a6;
-      --color-error: #ef4444;
-      --color-warning: #f59e0b;
-      --color-info: #3b82f6;
-
-      --spacing-xs: 4px;
-      --spacing-sm: 8px;
-      --spacing-md: 16px;
-      --spacing-lg: 24px;
-      --spacing-xl: 32px;
-      --spacing-2xl: 40px;
-      --spacing-3xl: 48px;
-
+    :root {
+      --primary-900: #0d0d2b;
+      --accent-purple: #7c3aed;
+      --accent-indigo: #4f46e5;
+      --accent-cyan: #06b6d4;
+      --accent-pink: #ec4899;
+      --accent-green: #10b981;
+      --grad-sidebar: linear-gradient(180deg, #0d0d2b 0%, #1a1052 50%, #2d1060 100%);
+      --grad-primary: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --surface-bg: #f0f2ff;
+      --surface-card: #ffffff;
+      --text-primary: #0f0e2e;
+      --text-secondary: #4b5563;
+      --text-muted: #9ca3af;
+      --text-white: #ffffff;
+      --text-white-muted: rgba(255, 255, 255, 0.7);
+      --border-light: rgba(79, 70, 229, 0.15);
+      --shadow-sm: 0 2px 8px rgba(79, 70, 229, 0.08);
+      --shadow-md: 0 8px 24px rgba(79, 70, 229, 0.14);
+      --shadow-lg: 0 16px 48px rgba(79, 70, 229, 0.2);
+      --shadow-glow: 0 0 32px rgba(124, 58, 237, 0.35);
+      --sidebar-w: 260px;
+      --sidebar-collapsed: 72px;
       --radius-sm: 8px;
-      --radius-md: 12px;
-      --radius-lg: 16px;
-      --radius-xl: 24px;
-      --radius-full: 9999px;
-
-      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-      --shadow-glow: 0 0 30px rgba(20, 184, 166, 0.3);
-
-      --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-      --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
-      --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-xl: 28px;
+      --transition: 0.3s ease;
     }
 
-    * {
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
     }
 
     html {
-      font-size: 16px;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+      scroll-behavior: smooth;
     }
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-  line-height: 1.6;
-  color: var(--color-text-primary);
-  background: linear-gradient(135deg, #0a192f 0%, #0d2847 50%, #134e4a 100%);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  overflow-x: hidden;
-}
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--surface-bg);
+      color: var(--text-primary);
+      display: flex;
+      min-height: 100vh;
+    }
 
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: radial-gradient(circle at 2px 2px, rgba(255, 255, 255, 0.05) 1px, transparent 0);
-  background-size: 40px 40px;
-  pointer-events: none;
-  z-index: 1;
-}
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
 
-body::after {
-  content: '';
-  position: fixed;
-  top: -50%;
-  right: -50%;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle, rgba(20, 184, 166, 0.1) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 1;
-  animation: pulse 8s ease-in-out infinite;
-}
+    ::-webkit-scrollbar-track {
+      background: var(--primary-900);
+    }
 
-@keyframes pulse {
-  0%, 100% { opacity: 0.5; transform: scale(1); }
-  50% { opacity: 0.8; transform: scale(1.1); }
-}
+    ::-webkit-scrollbar-thumb {
+      background: var(--accent-purple);
+      border-radius: 10px;
+    }
 
-.app-header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(10, 25, 47, 0.8);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  padding: var(--spacing-lg) 0;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-}
+    /* SIDEBAR */
+    .sidebar {
+      width: var(--sidebar-w);
+      min-height: 100vh;
+      background: var(--grad-sidebar);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 100;
+      transition: width var(--transition);
+      overflow: hidden;
+      box-shadow: 4px 0 32px rgba(0, 0, 0, 0.4);
+    }
 
-.header-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 var(--spacing-xl);
-}
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 28px 22px 24px;
+      border-bottom: 1px solid var(--glass-border);
+    }
 
-.app-title {
-  font-size: clamp(1.25rem, 3vw, 1.75rem);
-  font-weight: 700;
-  color: var(--color-text-light);
-  text-align: center;
-  letter-spacing: 1px;
-  margin-bottom: var(--spacing-lg);
-  text-shadow: 0 2px 8px rgba(20, 184, 166, 0.3);
-}
+    .logo-icon {
+      width: 42px;
+      height: 42px;
+      background: var(--grad-primary);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+      box-shadow: var(--shadow-glow);
+    }
 
-.main-nav {
-  display: flex;
-  justify-content: center;
-  gap: var(--spacing-md);
-  flex-wrap: wrap;
-}
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
 
-.nav-link {
-  display: inline-block;
-  padding: var(--spacing-md) var(--spacing-xl);
-  font-size: 1rem;
-  font-weight: 500;
-  color: var(--color-text-light);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--radius-full);
-  text-decoration: none;
-  transition: all var(--transition-normal);
-  backdrop-filter: blur(8px);
-}
+    .logo-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-white);
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+    }
 
-.nav-link:hover {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(20, 184, 166, 0.4);
-}
+    .logo-sub {
+      font-size: 10px;
+      font-weight: 400;
+      color: var(--text-white-muted);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
 
-.nav-link.active {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
-  box-shadow: 0 4px 12px rgba(20, 184, 166, 0.3);
-}
+    .sidebar-nav {
+      flex: 1;
+      padding: 20px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
 
-.main-content {
-  flex: 1;
-  position: relative;
-  z-index: 2;
-  padding: var(--spacing-3xl) 0;
-}
+    .nav-section-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.35);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 12px 10px 6px;
+      white-space: nowrap;
+    }
 
-.container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 0 var(--spacing-xl);
-}
-
-.content-card {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: var(--spacing-lg);
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 14px;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: rgba(255, 255, 255, 0.65);
+      font-size: 13.5px;
+      font-weight: 500;
+      transition: all var(--transition);
+      white-space: nowrap;
+      position: relative;
       overflow: hidden;
     }
 
-.hero-section {
-  text-align: center;
-}
+    .nav-link::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--grad-primary);
+      opacity: 0;
+      transition: opacity var(--transition);
+      border-radius: var(--radius-sm);
+    }
 
-.hero-title {
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 800;
-  color: var(--color-text-light);
-  margin-bottom: var(--spacing-xl);
-  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-}
+    .nav-link:hover::before,
+    .nav-link.active::before {
+      opacity: 1;
+    }
 
-.hero-description {
-  max-width: 700px;
-  margin: 0 auto;
-  line-height: 1.8;
-  font-size: 1.125rem;
-}
+    .nav-link:hover,
+    .nav-link.active {
+      color: var(--text-white);
+      transform: translateX(3px);
+      box-shadow: 0 4px 20px rgba(79, 70, 229, 0.4);
+    }
 
-.page-title {
-  font-size: clamp(1.75rem, 3vw, 2.25rem);
-  font-weight: 700;
-  color: var(--color-primary-dark);
-  margin-bottom: var(--spacing-xl);
-  text-align: center;
-}
+    .nav-icon {
+      font-size: 17px;
+      z-index: 1;
+      flex-shrink: 0;
+    }
 
-.section-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--color-text-primary);
-  margin-bottom: var(--spacing-lg);
-}
+    .nav-text {
+      z-index: 1;
+    }
 
-.card {
-  padding: var(--spacing-lg);
-  border-radius: var(--radius-md);
-  background: rgba(20, 184, 166, 0.05);
-  border: 1px solid rgba(20, 184, 166, 0.2);
-  color: var(--color-text-secondary);
-  line-height: 1.7;
-}
+    .nav-badge {
+      margin-left: auto;
+      background: var(--accent-pink);
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 20px;
+      z-index: 1;
+    }
 
-.card.success {
-  background: rgba(20, 184, 166, 0.1);
-  border-color: var(--color-success);
-  color: var(--color-primary-dark);
-}
+    .sidebar-footer {
+      padding: 14px;
+      border-top: 1px solid var(--glass-border);
+    }
 
-.card.error {
-  background: rgba(239, 68, 68, 0.1);
-  border-color: var(--color-error);
-  color: #991b1b;
-}
+    .logout-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 11px 14px;
+      border-radius: var(--radius-sm);
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      color: #fca5a5;
+      font-size: 13.5px;
+      font-weight: 500;
+      font-family: 'Poppins', sans-serif;
+      cursor: pointer;
+      transition: all var(--transition);
+      text-decoration: none;
+      white-space: nowrap;
+    }
 
-.card.info {
-  background: rgba(59, 130, 246, 0.1);
-  border-color: var(--color-info);
-  color: #1e40af;
-}
+    .logout-btn:hover {
+      background: rgba(239, 68, 68, 0.25);
+      color: #fecaca;
+      transform: translateX(3px);
+    }
 
-.flash-messages {
-  margin-bottom: var(--spacing-xl);
-}
+    /* LAYOUT */
+    .app-wrapper {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
 
-.flash {
-  padding: var(--spacing-lg);
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid var(--color-error);
-  border-radius: var(--radius-md);
-  color: #991b1b;
-  margin-bottom: var(--spacing-md);
-}
+    .topbar {
+      height: 68px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: var(--shadow-sm);
+    }
 
-.upload-form,
-.manage-form,
-.retrain-form {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-lg);
-}
+    .topbar-left h2 {
+      font-size: 18px;
+      font-weight: 700;
+      background: var(--grad-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
-}
+    .topbar-left p {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
 
-.form-label {
-  font-weight: 600;
-  color: var(--color-text-primary);
-  font-size: 0.875rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
+    .topbar-avatar {
+      width: 38px;
+      height: 38px;
+      background: var(--grad-primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: var(--shadow-md);
+      transition: transform var(--transition);
+    }
 
-.text-input,
-.file-input {
-  padding: var(--spacing-md) var(--spacing-lg);
-  font-size: 1rem;
-  border: 2px solid #e2e8f0;
-  border-radius: var(--radius-md);
-  background: white;
-  color: var(--color-text-primary);
-  transition: all var(--transition-normal);
-  font-family: inherit;
-}
+    .topbar-avatar:hover {
+      transform: scale(1.08);
+    }
 
-.text-input:focus,
-.file-input:focus {
-  outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.1);
-}
+    .main-content {
+      flex: 1;
+      padding: 32px;
+      animation: fadeInUp 0.6s ease;
+    }
 
-.file-input {
-  cursor: pointer;
-}
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
 
-.file-input::file-selector-button {
-  padding: var(--spacing-sm) var(--spacing-lg);
-  margin-right: var(--spacing-md);
-  border: none;
-  border-radius: var(--radius-sm);
-  background: var(--color-primary);
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all var(--transition-normal);
-}
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-.file-input::file-selector-button:hover {
-  background: var(--color-primary-dark);
-}
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
 
-.btn {
-  display: inline-block;
-  padding: var(--spacing-md) var(--spacing-xl);
-  font-size: 1rem;
-  font-weight: 600;
-  text-align: center;
-  text-decoration: none;
-  border: none;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  transition: all var(--transition-normal);
-  font-family: inherit;
-  line-height: 1.5;
-}
+    /* PAGE HEADER */
+    .page-header {
+      margin-bottom: 28px;
+    }
 
-.btn-primary {
-  background: var(--color-primary);
-  color: white;
-  box-shadow: var(--shadow-md);
-}
+    .page-header h1 {
+      font-size: 26px;
+      font-weight: 800;
+      background: var(--grad-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 6px;
+    }
 
-.btn-primary:hover:not(:disabled) {
-  background: var(--color-primary-dark);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg), var(--shadow-glow);
-}
+    .page-header p {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
 
-.btn-secondary {
-  background: rgba(100, 116, 139, 0.1);
-  color: var(--color-text-primary);
-  border: 1px solid #cbd5e1;
-}
+    /* RESULTS GRID */
+    .results-layout {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 24px;
+      align-items: start;
+    }
 
-.btn-secondary:hover:not(:disabled) {
-  background: rgba(100, 116, 139, 0.2);
-  border-color: #94a3b8;
-  transform: translateY(-2px);
-}
+    /* MEDIA CARD */
+    .media-card {
+      background: var(--surface-card);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      animation: fadeInUp 0.5s ease;
+    }
 
-.btn-danger {
-  background: var(--color-error);
-  color: white;
-}
+    .media-card-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-.btn-danger:hover:not(:disabled) {
-  background: #dc2626;
-  transform: translateY(-1px);
-}
+    .media-card-header h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
 
-.btn-small {
-  padding: var(--spacing-sm) var(--spacing-md);
-  font-size: 0.875rem;
-}
+    .media-card-body {
+      padding: 24px;
+    }
 
-.btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none !important;
-}
+    .result-image {
+      width: 100%;
+      border-radius: var(--radius-md);
+      display: block;
+      object-fit: contain;
+      max-height: 480px;
+      background: #0f0e2e;
+    }
 
-.button-group {
-  display: flex;
-  gap: var(--spacing-md);
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: var(--spacing-lg);
-}
+    .result-video-container {
+      position: relative;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
 
-.action-links {
-  display: flex;
-  gap: var(--spacing-md);
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: var(--spacing-2xl);
-}
+    .result-video {
+      width: 100%;
+      display: block;
+      border-radius: var(--radius-md);
+      max-height: 420px;
+    }
 
-.instruction-text {
-  text-align: center;
-  color: var(--color-text-secondary);
-  margin-bottom: var(--spacing-xl);
-  line-height: 1.7;
-}
-
-.webcam-container {
-  max-width: 640px;
-  margin: 0 auto var(--spacing-xl);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: var(--shadow-lg);
-}
-
-.webcam-video {
-  width: 100%;
-  height: auto;
-  display: block;
-  border: 3px solid var(--color-primary);
-  border-radius: var(--radius-lg);
-}
-
-.webcam-canvas {
-  display: none;
-}
-
-.overlay-canvas {
+    .overlay-canvas {
       position: absolute;
       top: 0;
       left: 0;
@@ -439,330 +409,532 @@ body::after {
       pointer-events: none;
     }
 
-.log-container {
-  margin-top: var(--spacing-xl);
-  min-height: 60px;
-}
+    /* RESULTS PANEL */
+    .results-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
 
-.add-face-section,
-.known-faces-section,
-.retrain-section {
-  margin-bottom: var(--spacing-2xl);
-  padding-bottom: var(--spacing-2xl);
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.retrain-section {
-  border-bottom: none;
-}
-
-.faces-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: var(--spacing-md);
-  max-height: 400px;
-  overflow-y: auto;
-  padding: var(--spacing-md);
-  background: rgba(241, 245, 249, 0.5);
-  border-radius: var(--radius-md);
-}
-
-.person {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--spacing-md);
-  padding: var(--spacing-md);
-  background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: var(--radius-sm);
-  transition: all var(--transition-fast);
-}
-
-.person:hover {
-  border-color: var(--color-primary);
-  box-shadow: var(--shadow-sm);
-}
-
-.person-name {
-  flex: 1;
-  font-weight: 500;
-  color: var(--color-text-primary);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.delete-form {
-  margin: 0;
-}
-
-.result-image-container,
-    .result-video-container {
-     width: 100%;
-      max-height: 400px;
-      margin-bottom: var(--spacing-md);
-      overflow: hidden;
-      border-radius: var(--radius-md);
+    /* STATUS CARD */
+    .status-card {
+      background: var(--surface-card);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-light);
       box-shadow: var(--shadow-md);
-      position: relative;
+      overflow: hidden;
+      animation: fadeInUp 0.5s ease both;
+      animation-delay: 0.1s;
+    }
 
-.result-image,
-    .result-video {
-     max-width: 100%;
-      height: auto;
+    .status-header {
+      padding: 18px 24px 16px;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status-header h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .status-badge {
+      margin-left: auto;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .badge-success {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--accent-green);
+    }
+
+    .badge-warning {
+      background: rgba(245, 158, 11, 0.1);
+      color: #d97706;
+    }
+
+    .badge-error {
+      background: rgba(239, 68, 68, 0.1);
+      color: #dc2626;
+    }
+
+    /* FACE LIST */
+    .face-list {
+      padding: 16px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .face-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, rgba(79, 70, 229, 0.04), rgba(124, 58, 237, 0.04));
+      border: 1px solid rgba(79, 70, 229, 0.1);
+      transition: all var(--transition);
+      animation: fadeInUp 0.4s ease both;
+    }
+
+    .face-item:hover {
+      transform: translateX(4px);
+      box-shadow: var(--shadow-sm);
+      border-color: rgba(79, 70, 229, 0.25);
+    }
+
+    .face-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .face-avatar.known {
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    }
+
+    .face-avatar.unknown {
+      background: linear-gradient(135deg, #6b7280, #374151);
+    }
+
+    .face-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .face-number {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 2px;
+    }
+
+    .face-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .face-name.unknown-name {
+      color: var(--text-secondary);
+    }
+
+    .face-distance {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* CONFIDENCE BAR */
+    .confidence-bar-wrap {
+      margin-top: 6px;
+    }
+
+    .confidence-bar-bg {
+      height: 4px;
+      background: rgba(79, 70, 229, 0.1);
+      border-radius: 4px;
+    }
+
+    .confidence-bar-fill {
+      height: 4px;
+      border-radius: 4px;
+      background: var(--grad-primary);
+      transition: width 1s ease;
+    }
+
+    /* EMPTY / PENDING STATE */
+    .empty-state {
+      padding: 40px 24px;
+      text-align: center;
+    }
+
+    .empty-state-icon {
+      font-size: 48px;
+      margin-bottom: 14px;
       display: block;
     }
 
-.results-card {
-  background: linear-gradient(135deg, rgba(20, 184, 166, 0.05) 0%, rgba(6, 182, 212, 0.05) 100%);
-  border: 2px solid var(--color-primary);
-  padding: var(--spacing-xl);
-}
+    .empty-state h4 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
 
-.results-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--color-primary-dark);
-  margin-bottom: var(--spacing-lg);
-}
+    .empty-state p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
 
-.results-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
-}
+    /* ACTION BUTTONS */
+    .action-card {
+      background: var(--surface-card);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-sm);
+      padding: 20px 24px;
+      animation: fadeInUp 0.5s ease both;
+      animation-delay: 0.2s;
+    }
 
-.result-item {
-  padding: var(--spacing-md);
-  background: white;
-  border-radius: var(--radius-sm);
-  border-left: 4px solid var(--color-primary);
-}
+    .action-card h3 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 14px;
+    }
 
-.match-name {
-  color: var(--color-primary-dark);
-  font-weight: 600;
-  font-size: 1.125rem;
-}
+    .action-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
 
-.match-distance {
-  color: var(--color-text-muted);
-  font-size: 0.875rem;
-}
+    /* BUTTONS */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 22px;
+      border-radius: var(--radius-sm);
+      font-size: 13.5px;
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all var(--transition);
+      border: none;
+      outline: none;
+      justify-content: center;
+    }
 
-.no-results {
-  text-align: center;
-  padding: var(--spacing-2xl);
-  color: var(--color-text-muted);
-}
+    .btn-primary {
+      background: var(--grad-primary);
+      color: white;
+      box-shadow: 0 4px 16px rgba(79, 70, 229, 0.35);
+    }
 
-.app-footer {
-  position: relative;
-  z-index: 2;
-  background: rgba(10, 25, 47, 0.9);
-  backdrop-filter: blur(12px);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding: var(--spacing-xl) 0;
-  margin-top: auto;
-}
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(79, 70, 229, 0.5);
+    }
 
-.footer-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 var(--spacing-xl);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: var(--spacing-lg);
-}
+    .btn-secondary {
+      background: rgba(79, 70, 229, 0.08);
+      color: var(--accent-indigo);
+      border: 1px solid rgba(79, 70, 229, 0.2);
+    }
 
-.footer-copyright {
-  color: var(--color-text-muted);
-  font-size: 0.875rem;
-}
+    .btn-secondary:hover {
+      background: rgba(79, 70, 229, 0.15);
+      transform: translateY(-2px);
+    }
 
-.footer-links {
-  display: flex;
-  gap: var(--spacing-xl);
-}
+    .btn-full {
+      width: 100%;
+    }
 
-.footer-link {
-  color: var(--color-text-muted);
-  text-decoration: none;
-  font-size: 0.875rem;
-  transition: color var(--transition-fast);
-}
+    /* FOOTER */
+    .app-footer {
+      background: var(--surface-card);
+      border-top: 1px solid var(--border-light);
+      padding: 18px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
 
-.footer-link:hover {
-  color: var(--color-primary-light);
-}
+    .footer-copyright {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
 
-@media (max-width: 768px) {
-  .header-container,
-  .container {
-    padding: 0 var(--spacing-lg);
-  }
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
 
-  .content-card {
-    padding: var(--spacing-xl);
-  }
+    .footer-link {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color var(--transition);
+    }
 
-  .main-nav {
-    gap: var(--spacing-sm);
-  }
+    .footer-link:hover {
+      color: var(--accent-indigo);
+    }
 
-  .nav-link {
-    padding: var(--spacing-sm) var(--spacing-lg);
-    font-size: 0.875rem;
-  }
+    /* RESPONSIVE */
+    @media (max-width: 1100px) {
+      .results-layout {
+        grid-template-columns: 1fr;
+      }
 
-  .button-group,
-  .action-links {
-    flex-direction: column;
-  }
+      .results-panel {
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
 
-  .btn {
-    width: 100%;
-  }
+      .status-card,
+      .action-card {
+        flex: 1;
+        min-width: 280px;
+      }
+    }
 
-  .faces-grid {
-    grid-template-columns: 1fr;
-  }
+    @media (max-width: 900px) {
+      .sidebar {
+        width: var(--sidebar-collapsed);
+      }
 
-  .footer-container {
-    flex-direction: column;
-    text-align: center;
-  }
+      .logo-text,
+      .nav-text,
+      .nav-section-label,
+      .nav-badge,
+      .logout-btn span {
+        display: none;
+      }
 
-  .footer-links {
-    flex-direction: column;
-    gap: var(--spacing-md);
-  }
-}
+      .sidebar-logo {
+        padding: 22px 15px;
+        justify-content: center;
+      }
 
-@media (max-width: 480px) {
-  .app-title {
-    font-size: 1rem;
-    letter-spacing: 0.5px;
-  }
+      .nav-link {
+        justify-content: center;
+        padding: 13px;
+      }
 
-  .hero-title {
-    font-size: 1.5rem;
-  }
+      .logout-btn {
+        justify-content: center;
+        padding: 13px;
+      }
 
-  .page-title {
-    font-size: 1.5rem;
-  }
-}
+      .app-wrapper {
+        margin-left: var(--sidebar-collapsed);
+      }
+    }
 
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
+    @media (max-width: 640px) {
+      .main-content {
+        padding: 20px;
+      }
 
+      .topbar {
+        padding: 0 20px;
+      }
+    }
   </style>
 </head>
+
 <body>
-  <header class="app-header">
-    <div class="header-container">
-      <h1 class="app-title">INTEGRATED FACE RECOGNITION SYSTEM</h1>
-      <nav class="main-nav">
-        <a href="{{ url_for('index') }}" class="nav-link">Home</a>
-        <a href="{{ url_for('upload_page') }}" class="nav-link">Upload & Recognize</a>
-        <a href="{{ url_for('webcam_page') }}" class="nav-link">Webcam</a>
-        <a href="{{ url_for('manage_page') }}" class="nav-link">Manage Faces</a>
-      </nav>
-    </div>
-  </header>
 
-  <main class="main-content">
-    <div class="container">
-      <div class="content-card">
-        <h2 class="page-title">Recognition Result</h2>
-
-        {% if source == "upload" and filename %}
-        <div class="result-image-container">
-          <img src="{{ url_for('uploaded_file', filename=filename) }}" alt="Processed image with faces marked" class="result-image">
-        </div>
-        {% elif source == "video" and filename %}
-        <div class="result-video-container">
-          <video id="resultVideo" controls class="result-video">
-            <source src="{{ url_for('uploaded_file', filename=filename) }}" type="video/mp4">
-            Your browser does not support the video tag.
-          </video>
-          <canvas id="overlayCanvas" class="overlay-canvas"></canvas>
-        </div>
-        {% endif %}
-
-        {% if result is defined %}
-          {% if result.status == 'ok' %}
-          <div class="card results-card">
-            <h3 class="results-title">Detected {% if source == "video" %}Known {% endif %}Faces:</h3>
-            <ul class="results-list">
-              {% for r in result.results %}
-              <li class="result-item">
-                {% if source != "video" %}
-                  <strong>Face #{{ r.face_index }}</strong> —
-                {% endif %}
-                <span class="match-name">{{ r.name }}</span>
-                <span class="match-distance">
-                  {% if r.distance %}
-                    ({% if source == "video" %}min {% endif %}distance: {{ "%.3f"|format(r.distance) }})
-                  {% endif %}
-                </span>
-              </li>
-              {% endfor %}
-            </ul>
-          </div>
-          {% elif result.status == 'pending' %}
-          <div class="card results-card">
-            <p>{{ result.message }}</p>
-          </div>
-          {% else %}
-          <div class="card no-results">
-            <p>{{ result.message }}</p>
-          </div>
-          {% endif %}
-        {% else %}
-          <div class="card no-results">
-            <p>No result data available.</p>
-          </div>
-        {% endif %}
-
-        <div class="action-links">
-          {% if source == "upload" %}
-          <a href="{{ url_for('upload_page') }}" class="btn btn-primary">Try another</a>
-          {% endif %}
-          <a href="{{ url_for('index') }}" class="btn btn-secondary">Home</a>
-        </div>
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <!-- <div class="logo-icon">🧠</div> -->
+      <div class="logo-text">
+        <span class="logo-title">Face Recognition</span>
+        <!-- <span class="logo-sub">AI System v2.0</span> -->
       </div>
     </div>
-  </main>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Main Menu</div>
+      <a href="{{ url_for('index') }}" class="nav-link"><span class="nav-icon">🏠</span><span
+          class="nav-text">Dashboard</span></a>
+      <a href="{{ url_for('upload_page') }}" class="nav-link active"><span class="nav-icon">📤</span><span
+          class="nav-text">Upload &amp; Recognize</span></a>
+      <a href="{{ url_for('webcam_page') }}" class="nav-link"><span class="nav-icon">📷</span><span
+          class="nav-text">Webcam</span></a>
+      <a href="{{ url_for('manage_page') }}" class="nav-link"><span class="nav-icon">👥</span><span
+          class="nav-text">Manage Faces</span></a>
+    </nav>
 
-  <footer class="app-footer">
-    <div class="footer-container">
-      <p class="footer-copyright">© 2024 Face AI. All Rights Reserved.</p>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="app-wrapper">
+    <header class="topbar">
+      <div class="topbar-left">
+        <h2>Recognition Result</h2>
+        <p>Analysis complete — Face detection results below</p>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-avatar">👤</div>
+      </div>
+    </header>
+
+    <main class="main-content">
+
+      <div class="page-header">
+
+        <p>
+          {% if source == "upload" %}Image analyzed successfully.
+          {% elif source == "video" %}Video analysis — Known faces detected.
+          {% else %}Recognition complete.{% endif %}
+        </p>
+      </div>
+
+      <div class="results-layout">
+
+        <!-- MEDIA PANEL -->
+        <div class="media-card">
+          <div class="media-card-header">
+            <span style="font-size:18px;">{% if source == 'video' %}🎬{% else %}🖼️{% endif %}</span>
+            <h3>{% if source == 'video' %}Processed Video{% else %}Processed Image{% endif %}</h3>
+          </div>
+          <div class="media-card-body">
+            {% if source == "upload" and filename %}
+            <img src="{{ url_for('uploaded_file', filename=filename) }}" alt="Processed image with faces marked"
+              class="result-image">
+            {% elif source == "video" and filename %}
+            <div class="result-video-container">
+              <video id="resultVideo" controls class="result-video">
+                <source src="{{ url_for('uploaded_file', filename=filename) }}" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              <canvas id="overlayCanvas" class="overlay-canvas"></canvas>
+            </div>
+            {% else %}
+            <div class="empty-state">
+              <span class="empty-state-icon">🖼️</span>
+              <h4>No media available</h4>
+              <p>The processed file could not be displayed.</p>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- RESULTS PANEL -->
+        <div class="results-panel">
+
+          <!-- STATUS CARD -->
+          <div class="status-card">
+            <div class="status-header">
+             
+              <h3>Detected {% if source == "video" %}Known {% endif %}Faces</h3>
+              {% if result is defined and result.status == 'ok' %}
+              <span class="status-badge badge-success">✓ Recognized</span>
+              {% elif result is defined and result.status == 'pending' %}
+              <span class="status-badge badge-warning">⏳ Pending</span>
+              {% else %}
+              <span class="status-badge badge-error">✗ None Found</span>
+              {% endif %}
+            </div>
+
+            {% if result is defined %}
+            {% if result.status == 'ok' %}
+            <div class="face-list">
+              {% for r in result.results %}
+              <div class="face-item" style="animation-delay: {{ loop.index0 * 0.07 }}s">
+                <div class="face-avatar {% if r.name != 'Unknown' %}known{% else %}unknown{% endif %}">
+                  {% if r.name != 'Unknown' %}😊{% else %}❓{% endif %}
+                </div>
+                <div class="face-info">
+                  {% if source != "video" %}
+                  <div class="face-number">Face #{{ r.face_index }}</div>
+                  {% endif %}
+                  <div class="face-name {% if r.name == 'Unknown' %}unknown-name{% endif %}">{{ r.name }}</div>
+                  {% if r.distance %}
+                  <div class="face-distance">
+                    Distance: {{ "%.3f"|format(r.distance) }}
+                    {% if r.distance < 0.4 %}(Excellent match) {% elif r.distance < 0.5 %}(Good match) {% else %}(Close
+                      match){% endif %} </div>
+                      <div class="confidence-bar-wrap">
+                        <div class="confidence-bar-bg">
+                          <div class="confidence-bar-fill" style="width: {{ [(1 - r.distance) * 100, 0]|max|round }}%">
+                          </div>
+                        </div>
+                      </div>
+                      {% endif %}
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+
+              {% elif result.status == 'pending' %}
+              <div class="empty-state">
+                <span class="empty-state-icon">⏳</span>
+                <h4>Processing Video</h4>
+                <p>{{ result.message }}</p>
+              </div>
+
+              {% else %}
+              <div class="empty-state">
+                <span class="empty-state-icon">🔍</span>
+                <h4>No Faces Detected</h4>
+                <p>{{ result.message }}</p>
+              </div>
+              {% endif %}
+
+              {% else %}
+              <div class="empty-state">
+                <span class="empty-state-icon">⚠️</span>
+                <h4>No Result Data</h4>
+                <p>No result data is available. Please try uploading again.</p>
+              </div>
+              {% endif %}
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <div class="action-card">
+              <h3>Actions</h3>
+              <div class="action-buttons">
+                {% if source == "upload" %}
+                <a href="{{ url_for('upload_page') }}" class="btn btn-primary btn-full">📤 Try Another Image</a>
+                {% endif %}
+                <a href="{{ url_for('manage_page') }}" class="btn btn-secondary btn-full">👥 Manage Faces</a>
+                <a href="{{ url_for('index') }}" class="btn btn-secondary btn-full">🏠 Back to Dashboard</a>
+              </div>
+            </div>
+
+          </div><!-- /results-panel -->
+        </div><!-- /results-layout -->
+
+    </main>
+
+    <footer class="app-footer">
+      <p class="footer-copyright">© 2025 Face AI — Integrated Recognition System. All Rights Reserved.</p>
       <div class="footer-links">
         <a href="#" class="footer-link">Privacy Policy</a>
         <a href="#" class="footer-link">Terms of Service</a>
       </div>
-    </div>
-  </footer>
+    </footer>
+  </div>
 
   <script>
     const video = document.getElementById('resultVideo');
     const canvas = document.getElementById('overlayCanvas');
-    const ctx = canvas.getContext('2d');
 
-    if (video) {
+    if (video && canvas) {
+      const ctx = canvas.getContext('2d');
+
       video.addEventListener('play', () => {
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
@@ -770,9 +942,6 @@ body::after {
         function drawBoxes() {
           if (!video.paused && !video.ended) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            const canvasRect = canvas.getBoundingClientRect();
-            const videoRect = video.getBoundingClientRect();
-
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
             const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
@@ -782,28 +951,26 @@ body::after {
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ image: dataUrl })
             })
-            .then(response => response.json())
-            .then(data => {
-              if (data.status === 'ok') {
-                data.results.forEach(result => {
-                  const [top, right, bottom, left] = result.location;
-                  const scaleX = canvas.width / video.videoWidth;
-                  const scaleY = canvas.height / video.videoHeight;
-                  const x = left * scaleX;
-                  const y = top * scaleY;
-                  const width = (right - left) * scaleX;
-                  const height = (bottom - top) * scaleY;
-                  const color = result.name === 'Unknown' ? 'red' : 'green';
-                  ctx.strokeStyle = color;
-                  ctx.lineWidth = 2;
-                  ctx.strokeRect(x, y, width, height);
-                  ctx.fillStyle = color;
-                  ctx.font = '12px Arial';
-                  ctx.fillText(`${result.name} (Face #${result.face_index})`, x, y - 5);
-                });
-              }
-            })
-            .catch(err => console.error('Error:', err));
+              .then(r => r.json())
+              .then(data => {
+                if (data.status === 'ok') {
+                  data.results.forEach(result => {
+                    const [top, right, bottom, left] = result.location;
+                    const sx = canvas.width / video.videoWidth;
+                    const sy = canvas.height / video.videoHeight;
+                    const x = left * sx, y = top * sy;
+                    const w = (right - left) * sx, h = (bottom - top) * sy;
+                    const color = result.name === 'Unknown' ? '#ef4444' : '#4f46e5';
+                    ctx.strokeStyle = color;
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(x, y, w, h);
+                    ctx.fillStyle = color;
+                    ctx.font = 'bold 13px Poppins, sans-serif';
+                    ctx.fillText(`${result.name}`, x + 4, y - 6);
+                  });
+                }
+              })
+              .catch(err => console.error('Error:', err));
 
             requestAnimationFrame(drawBoxes);
           }
@@ -811,14 +978,21 @@ body::after {
         drawBoxes();
       });
 
-      video.addEventListener('pause', () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-      });
-
-      video.addEventListener('ended', () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-      });
+      video.addEventListener('pause', () => ctx.clearRect(0, 0, canvas.width, canvas.height));
+      video.addEventListener('ended', () => ctx.clearRect(0, 0, canvas.width, canvas.height));
     }
+
+    // animate confidence bars on load
+    window.addEventListener('load', () => {
+      document.querySelectorAll('.confidence-bar-fill').forEach(bar => {
+        const target = bar.style.width;
+        bar.style.width = '0%';
+        requestAnimationFrame(() => {
+          setTimeout(() => { bar.style.width = target; }, 200);
+        });
+      });
+    });
   </script>
 </body>
+
 </html>

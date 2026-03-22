@@ -120,12 +120,29 @@ def recognize_webcam():
 @app.route("/manage", methods=["GET"])
 def manage_page():
     persons = []
+    image_extensions = {'.jpg', '.jpeg', '.png', '.webp', '.bmp', '.gif'}
     for entry in sorted(FACES_DIR.iterdir()):
         if entry.is_dir():
-            persons.append(entry.name)
+            name = entry.name
+            # Find the first image file in the person's folder
+            face_image = None
+            for f in sorted(entry.iterdir()):
+                if f.suffix.lower() in image_extensions:
+                    # Build a URL-friendly relative path: name/filename
+                    face_image = f"{name}/{f.name}"
+                    break
+            persons.append({"name": name, "image": face_image})
         else:
-            persons.append(entry.stem)
+            # Flat file (legacy): the file itself is the face image
+            name = entry.stem
+            face_image = entry.name  # direct file in faces/
+            persons.append({"name": name, "image": face_image})
     return render_template("manage.html", persons=persons)
+
+@app.route("/face_image/<path:filepath>")
+def face_image(filepath):
+    """Serve individual face images from the faces directory."""
+    return send_from_directory(str(FACES_DIR), filepath)
 
 @app.route("/add_face", methods=["POST"])
 def add_face():
