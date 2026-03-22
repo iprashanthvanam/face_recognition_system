@@ -39,7 +39,6 @@ Thumbs.db
 
 # uploads and generated data
 static/uploads/
-images/
 
 # ML / face encodings
 *.pkl
