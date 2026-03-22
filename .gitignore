@@ -1,0 +1,49 @@
+# 🔹 Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# 🔹 Virtual environment
+venv/
+env/
+ENV/
+
+# 🔹 Flask
+instance/
+*.db
+*.sqlite3
+
+# 🔹 Environment variables
+.env
+
+# 🔹 Face recognition / ML files
+*.pkl
+
+# 🔹 Uploaded files (VERY IMPORTANT)
+static/uploads/
+
+
+
+# 🔹 OS files
+.DS_Store
+Thumbs.db
+
+# 🔹 VS Code
+.vscode/
+
+# 🔹 Logs
+*.log
+
+
+
+# uploads and generated data
+static/uploads/
+images/
+
+# ML / face encodings
+*.pkl
+
+# cache
+__pycache__/
+*.pyc
