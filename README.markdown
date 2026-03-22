@@ -136,16 +136,6 @@ A complete visual walkthrough of every screen in the system.
 
 ---
 
-### 👤 Manage Faces
-
-<div align="center">
-  <img src="images/Manage faces.png" alt="Manage Faces Page" width="860"/>
-  <br/><br/>
-  <sub><b>Face management dashboard.</b> View all registered people in the database. Delete any person with one click. The known faces grid is scrollable and updates immediately after any change.</sub>
-</div>
-
----
-
 ### ➕ Add New Face
 
 <div align="center">
